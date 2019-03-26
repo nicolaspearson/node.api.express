@@ -14,6 +14,6 @@ export interface IServerConfigurations {
 	DB_NAME: string;
 }
 
-export function getServerConfig(): IServerConfigurations {
+export function get(): IServerConfigurations {
 	return nconf.get();
 }

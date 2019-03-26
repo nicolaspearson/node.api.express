@@ -1,17 +1,25 @@
+import 'module-alias/register';
+
+import * as dotenv from 'dotenv';
 import express from 'express';
 
-import { logger, setupAppLogger } from './logger/app.logger';
+import * as config from '@env';
+import { init as initLogger, logger } from '@logger/app.logger';
+
+// Init config
+dotenv.config();
+config.init();
+
+// Init logger
+initLogger();
 
 // Create a new express application instance
 const app: express.Application = express();
-
-// Setup up the logger
-setupAppLogger();
 
 app.get('/', (req, res) => {
 	res.send('Hello World!');
 });
 
-app.listen(3000, () => {
-	logger.debug('Example app listening on port 3000!');
+app.listen(config.get().API_PORT, () => {
+	logger.debug(`Example app listening on port ${config.get().API_PORT}!`);
 });
