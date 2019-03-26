@@ -1,0 +1,11 @@
+# Generated files
+dist/
+
+# Node files
+node_modules/
+
+# Log files
+logs/*.log
+
+# OS Files
+.DS_Store
