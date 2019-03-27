@@ -7,7 +7,8 @@
 		"rootDir": ".",
 		"baseUrl": "src",
 		"paths": {
-			"@actions/*": ["actions/*"],
+			"@app": ["app"],
+			"@controllers/*": ["controllers/*"],
 			"@db/*": ["db/*"],
 			"@env": ["env/index"],
 			"@logger": ["logger/index"],

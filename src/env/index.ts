@@ -10,7 +10,7 @@ export function init() {
 
 export interface IServerConfigurations {
 	API_HOST: string | number;
-	API_PORT: string | number;
+	API_PORT: number;
 	DB_NAME: string;
 }
 

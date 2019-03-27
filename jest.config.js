@@ -19,7 +19,8 @@ module.exports = {
 
 	// Map aliases
 	moduleNameMapper: {
-		'^@actions(.*)$': '<rootDir>/src/actions$1',
+		'^@app(.*)$': '<rootDir>/src/app$1',
+		'^@controllers(.*)$': '<rootDir>/src/controllers$1',
 		'^@db(.*)$': '<rootDir>/src/db$1',
 		'^@env(.*)$': '<rootDir>/src/env$1',
 		'^@logger(.*)$': '<rootDir>/src/logger$1',
