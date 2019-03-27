@@ -1,6 +1,7 @@
 import * as bodyParser from 'body-parser';
 import express from 'express';
 
+import HeroController from '@controllers/hero.controller';
 import * as config from '@env';
 import { logger } from '@logger';
 import loggerMiddleware from '@middleware/logger.middleware';
@@ -27,9 +28,12 @@ class App {
 	}
 
 	private initializeControllers() {
-		// controllers.forEach(controller => {
-		// 	this.app.use('/', controller.router);
-		// });
+		const controllers = [];
+		controllers.push(new HeroController());
+
+		controllers.forEach(controller => {
+			this.app.use('/', controller.router);
+		});
 	}
 }
 
