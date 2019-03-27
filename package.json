@@ -56,7 +56,7 @@
 		"@actions": "dist/actions",
 		"@db": "dist/db",
 		"@env": "dist/env/index",
-		"@logger": "dist/logger",
+		"@logger": "dist/logger/index",
 		"@models": "dist/models",
 		"@repositories": "dist/repositories",
 		"@services": "dist/services",

@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 import express from 'express';
 
 import * as config from '@env';
-import { init as initLogger, logger } from '@logger/app.logger';
+import { init as initLogger, logger } from '@logger';
 
 // Init config
 dotenv.config();

@@ -10,7 +10,7 @@
 			"@actions/*": ["actions/*"],
 			"@db/*": ["db/*"],
 			"@env": ["env/index"],
-			"@logger/*": ["logger/*"],
+			"@logger": ["logger/index"],
 			"@models/*": ["models/*"],
 			"@repositories/*": ["repositories/*"],
 			"@services/*": ["services/*"],
