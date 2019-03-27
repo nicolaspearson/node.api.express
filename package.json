@@ -1,11 +1,11 @@
 {
-	"name": "node.express.loki",
-	"version": "1.0.0",
-	"description": "A simple Node.js API, written using Typescript, Express, and Loki.js",
+	"name": "node.api.express",
+	"version": "0.0.1",
+	"description": "A simple Node.js API, written using Typescript and Express",
 	"main": "dist/index.js",
 	"author": "Nicolas Pearson",
 	"repository": {
-		"url": "https://github.com/nicolaspearson/node.express.loki.git",
+		"url": "https://github.com/nicolaspearson/node.api.express.git",
 		"type": "git"
 	},
 	"license": "MIT",
@@ -29,7 +29,6 @@
 	"dependencies": {
 		"boom": "~7.3.0",
 		"express": "~4.16.4",
-		"lokijs": "~1.5.6",
 		"module-alias": "~2.2.0",
 		"nconf": "~0.10.0",
 		"winston": "~3.2.1"
@@ -40,7 +39,7 @@
 		"@types/express": "~4.16.1",
 		"@types/jest": "~24.0.11",
 		"@types/nconf": "~0.10.0",
-		"@types/node": "~11.11.8",
+		"@types/node": "~11.12.0",
 		"@types/supertest": "~2.0.7",
 		"concurrently": "~4.1.0",
 		"dotenv": "~7.0.0",
