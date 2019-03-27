@@ -14,7 +14,7 @@
 		"build": "rm -rf ./dist && npm run build:ts && npm run tslint && npm run copy:env",
 		"build:ts": "tsc --rootDir ./src/",
 		"debug": "npm run build && npm run watch:debug",
-		"serve": "nodemon dist/index.js --delay 1",
+		"serve": "nodemon dist/index.js --delay 3",
 		"serve:debug": "nodemon --inspect=5858 dist/index.js",
 		"watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch:ts\" \"npm run serve\"",
 		"watch:debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch:ts\" \"npm run serve:debug\"",

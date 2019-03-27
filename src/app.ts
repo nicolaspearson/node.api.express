@@ -4,6 +4,7 @@ import express from 'express';
 import HeroController from '@controllers/hero.controller';
 import * as config from '@env';
 import { logger } from '@logger';
+import errorMiddleware from '@middleware/error.middleware';
 import loggerMiddleware from '@middleware/logger.middleware';
 
 class App {
@@ -13,6 +14,7 @@ class App {
 		this.app = express();
 		this.initializeMiddleware();
 		this.initializeControllers();
+		this.initializeErrorHandling();
 	}
 
 	public listen() {
@@ -25,6 +27,10 @@ class App {
 	private initializeMiddleware() {
 		this.app.use(loggerMiddleware);
 		this.app.use(bodyParser.json());
+	}
+
+	private initializeErrorHandling() {
+		this.app.use(errorMiddleware);
 	}
 
 	private initializeControllers() {
