@@ -11,6 +11,7 @@
 			"@db/*": ["db/*"],
 			"@env": ["env/index"],
 			"@logger": ["logger/index"],
+			"@middleware/*": ["middleware/*"],
 			"@models/*": ["models/*"],
 			"@repositories/*": ["repositories/*"],
 			"@services/*": ["services/*"],

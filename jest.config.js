@@ -23,6 +23,7 @@ module.exports = {
 		'^@db(.*)$': '<rootDir>/src/db$1',
 		'^@env(.*)$': '<rootDir>/src/env$1',
 		'^@logger(.*)$': '<rootDir>/src/logger$1',
+		'^@middleware(.*)$': '<rootDir>/src/middleware$1',
 		'^@models(.*)$': '<rootDir>/src/models$1',
 		'^@repositories(.*)$': '<rootDir>/src/repositories$1',
 		'^@services(.*)$': '<rootDir>/src/services$1',

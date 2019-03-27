@@ -54,7 +54,7 @@ export function init() {
 	}
 	// Add custom colours
 	winston.addColors(getCustomLogLevels().colors);
-	logger.debug('Logger: Initiated successfully');
+	logger.debug('Logger: Ready!');
 }
 
 function getCustomLogLevels() {
