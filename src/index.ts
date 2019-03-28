@@ -1,20 +1,33 @@
+import 'dotenv/config';
 import 'module-alias/register';
+import 'reflect-metadata';
 
-import * as dotenv from 'dotenv';
+import { createConnection } from 'typeorm';
 
 import App from '@app';
-import * as config from '@env';
-import { init as initLogger } from '@logger';
+import * as db from '@db/config.db';
+import * as env from '@env';
+import * as logger from '@logger';
 
 // We use dotenv and nconf to control
 // environment variables in the app.
-dotenv.config();
-config.init();
+env.init();
 
 // Winston is used for logging, lets
 // prepare the logger implementation.
-initLogger();
+logger.init();
 
-// Finally, initialize the app.
-const app = new App();
-app.listen();
+(async () => {
+	try {
+		// Connect to the database
+		const connection = await createConnection(db.config);
+		// Run migrations
+		await connection.runMigrations();
+	} catch (error) {
+		logger.logger.error(`Database: Error connecting: ${JSON.stringify(error)}`);
+		return error;
+	}
+	// Finally, initialize the app.
+	const app = new App();
+	app.listen();
+})();

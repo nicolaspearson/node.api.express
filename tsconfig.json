@@ -10,10 +10,12 @@
 			"@app": ["app"],
 			"@controllers/*": ["controllers/*"],
 			"@db/*": ["db/*"],
+			"@dto/*": ["dto/*"],
+			"@entities/*": ["entities/*"],
 			"@env": ["env/index"],
+			"@interfaces/*": ["interfaces/*"],
 			"@logger": ["logger/index"],
 			"@middleware/*": ["middleware/*"],
-			"@models/*": ["models/*"],
 			"@repositories/*": ["repositories/*"],
 			"@services/*": ["services/*"],
 			"@utils/*": ["utils/*"]

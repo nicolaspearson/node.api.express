@@ -18,7 +18,7 @@ class App {
 	}
 
 	public listen() {
-		const port: number = config.get().API_PORT;
+		const port: number = Number(config.get().API_PORT);
 		this.app.listen(port, () => {
 			logger.debug(`App: Listening on port ${port}!`);
 		});

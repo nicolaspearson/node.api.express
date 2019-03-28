@@ -1,8 +1,8 @@
-import * as express from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 import { logger } from '@logger';
 
-function loggerMiddleware(request: express.Request, response: express.Response, next: () => void) {
+function loggerMiddleware(request: Request, response: Response, next: NextFunction) {
 	logger.debug(`${request.method} ${request.path}`);
 	next();
 }

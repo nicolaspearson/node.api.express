@@ -22,10 +22,12 @@ module.exports = {
 		'^@app(.*)$': '<rootDir>/src/app$1',
 		'^@controllers(.*)$': '<rootDir>/src/controllers$1',
 		'^@db(.*)$': '<rootDir>/src/db$1',
+		'^@dto(.*)$': '<rootDir>/src/dto$1',
+		'^@entities(.*)$': '<rootDir>/src/entities$1',
 		'^@env(.*)$': '<rootDir>/src/env$1',
+		'^@interfaces(.*)$': '<rootDir>/src/interfaces$1',
 		'^@logger(.*)$': '<rootDir>/src/logger$1',
 		'^@middleware(.*)$': '<rootDir>/src/middleware$1',
-		'^@models(.*)$': '<rootDir>/src/models$1',
 		'^@repositories(.*)$': '<rootDir>/src/repositories$1',
 		'^@services(.*)$': '<rootDir>/src/services$1',
 		'^@utils(.*)$': '<rootDir>/src/utils$1'
