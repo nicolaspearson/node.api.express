@@ -24,14 +24,14 @@ export default class User {
 	public password: string;
 
 	@Column({ name: 'enabled', nullable: false, default: true })
-	public enabled: boolean;
+	public enabled?: boolean;
 
 	@CreateDateColumn({ name: 'created_at', type: 'timestamp with time zone' })
-	public createdAt: Date;
+	public createdAt?: Date;
 
 	@UpdateDateColumn({ name: 'updated_at', type: 'timestamp with time zone' })
-	public updatedAt: Date;
+	public updatedAt?: Date;
 
 	@Column({ name: 'deleted_at', type: 'timestamp with time zone' })
-	public deletedAt: Date;
+	public deletedAt?: Date;
 }
