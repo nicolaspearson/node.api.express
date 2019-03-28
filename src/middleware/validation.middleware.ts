@@ -10,7 +10,7 @@ function validationMiddleware<T>(type: any, skipMissingProperties = false): Requ
 				if (errors.length > 0) {
 					const message = errors
 						.map((error: ValidationError) => Object.values(error.constraints))
-						.join(', ');
+						.join(';');
 					next(Boom.badRequest(message));
 				} else {
 					next();

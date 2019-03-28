@@ -32,9 +32,7 @@ export default class UserService extends BaseService<User> {
 	}
 
 	public async register(userData: RegisterUserDto): Promise<CookieUser> {
-		if (
-			await this.userRepository.findOneByFilter({ where: { emailAddress: userData.emailAddress } })
-		) {
+		if (await this.userRepository.findOne({ emailAddress: userData.emailAddress })) {
 			throw Boom.badRequest('That email address is already registered!');
 		}
 		const hashedPassword = await this.encryptPassword(userData.password);
@@ -70,7 +68,7 @@ export default class UserService extends BaseService<User> {
 			}
 
 			// Validate the provided password
-			const valid = await this.validatePassword(userResult.password, userData.password);
+			const valid = await this.validatePassword(userData.password, userResult.password);
 			if (!valid) {
 				throw Boom.unauthorized('Invalid email address / password supplied');
 			}

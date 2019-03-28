@@ -1,6 +1,7 @@
 import Boom from 'boom';
 import {
 	DeleteResult,
+	FindConditions,
 	FindManyOptions,
 	FindOneOptions,
 	getRepository,
@@ -10,12 +11,11 @@ import {
 	SaveOptions
 } from 'typeorm';
 
-export default class BaseRepository<T> extends Repository<T> {
+export default class BaseRepository<T> {
 	private entityName: string;
 	private repository: Repository<T>;
 
 	constructor(entityName: string) {
-		super();
 		this.entityName = entityName;
 		this.repository = getRepository(this.entityName);
 	}
@@ -52,6 +52,13 @@ export default class BaseRepository<T> extends Repository<T> {
 			throw Boom.notFound(`${this.entityName}: The requested record was not found`);
 		}
 		return records;
+	}
+
+	public async findOne(
+		conditions?: FindConditions<T> | undefined,
+		options?: FindOneOptions<T> | undefined
+	): Promise<T | undefined> {
+		return await this.repository.findOne(conditions, options);
 	}
 
 	public async findOneById(id: number): Promise<T> {

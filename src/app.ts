@@ -1,6 +1,7 @@
 import * as bodyParser from 'body-parser';
 import express from 'express';
 
+import AuthController from '@controllers/auth.controller';
 import HeroController from '@controllers/hero.controller';
 import * as env from '@env';
 import { logger } from '@logger';
@@ -35,6 +36,7 @@ class App {
 
 	private initializeControllers() {
 		const controllers = [];
+		controllers.push(new AuthController());
 		controllers.push(new HeroController());
 
 		controllers.forEach(controller => {
