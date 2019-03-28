@@ -9,3 +9,7 @@ logs/*.log
 
 # OS Files
 .DS_Store
+
+# Database files
+/db/data
+
