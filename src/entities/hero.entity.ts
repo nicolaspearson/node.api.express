@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+	Column,
+	CreateDateColumn,
+	Entity,
+	PrimaryGeneratedColumn,
+	UpdateDateColumn
+} from 'typeorm';
 
 @Entity({ name: 'hero' })
 export default class Hero {
@@ -16,4 +22,13 @@ export default class Hero {
 
 	@Column({ name: 'age' })
 	public age: number;
+
+	@CreateDateColumn({ name: 'created_at', type: 'timestamp with time zone' })
+	public createdAt: Date;
+
+	@UpdateDateColumn({ name: 'updated_at', type: 'timestamp with time zone' })
+	public updatedAt: Date;
+
+	@Column({ name: 'deleted_at', type: 'timestamp with time zone' })
+	public deletedAt: Date;
 }
