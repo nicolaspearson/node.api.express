@@ -32,6 +32,6 @@ export default class User {
 	@UpdateDateColumn({ name: 'updated_at', type: 'timestamp with time zone' })
 	public updatedAt?: Date;
 
-	@Column({ name: 'deleted_at', type: 'timestamp with time zone' })
+	@Column({ name: 'deleted_at', nullable: true, type: 'timestamp with time zone' })
 	public deletedAt?: Date;
 }

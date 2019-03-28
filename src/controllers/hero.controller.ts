@@ -46,7 +46,7 @@ export default class HeroController implements Controller {
 
 	private createHero = async (request: express.Request, response: express.Response) => {
 		const heroData: CreateHeroDto = request.body;
-		const newHero = this.heroService.save(heroData);
+		const newHero = await this.heroService.save(heroData);
 		response.send(newHero);
 	};
 

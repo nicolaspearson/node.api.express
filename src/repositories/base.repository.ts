@@ -1,33 +1,23 @@
 import Boom from 'boom';
 import {
+	DeleteResult,
 	FindManyOptions,
 	FindOneOptions,
-	getManager,
+	getRepository,
 	QueryFailedError,
 	RemoveOptions,
 	Repository,
-	SaveOptions,
-	SelectQueryBuilder
+	SaveOptions
 } from 'typeorm';
 
-export default abstract class BaseRepository<T> extends Repository<T> {
+export default class BaseRepository<T> extends Repository<T> {
 	private entityName: string;
 	private repository: Repository<T>;
 
 	constructor(entityName: string) {
 		super();
 		this.entityName = entityName;
-	}
-
-	protected getRepository(): Repository<T> {
-		if (!this.repository) {
-			this.repository = getManager().getRepository(this.entityName);
-		}
-		return this.repository;
-	}
-
-	protected getQueryBuilder(): SelectQueryBuilder<T> {
-		return this.getRepository().createQueryBuilder(this.entityName);
+		this.repository = getRepository(this.entityName);
 	}
 
 	/**
@@ -53,11 +43,11 @@ export default abstract class BaseRepository<T> extends Repository<T> {
 	}
 
 	public async getAll(options?: FindManyOptions<T>): Promise<T[]> {
-		return await this.executeRepositoryFunction(this.getRepository().find(options));
+		return await this.executeRepositoryFunction(this.repository.find(options));
 	}
 
 	public async findManyByFilter(options: FindManyOptions<T>): Promise<T[]> {
-		const records: T[] = await this.executeRepositoryFunction(this.getRepository().find(options));
+		const records: T[] = await this.executeRepositoryFunction(this.repository.find(options));
 		if (!records) {
 			throw Boom.notFound(`${this.entityName}: The requested record was not found`);
 		}
@@ -65,7 +55,7 @@ export default abstract class BaseRepository<T> extends Repository<T> {
 	}
 
 	public async findOneById(id: number): Promise<T> {
-		const record: T = await this.executeRepositoryFunction(this.getRepository().findOne(id));
+		const record: T = await this.executeRepositoryFunction(this.repository.findOne(id));
 		if (!record) {
 			throw Boom.notFound(`${this.entityName}: The requested record was not found: ${id}`);
 		}
@@ -74,7 +64,7 @@ export default abstract class BaseRepository<T> extends Repository<T> {
 
 	public async findOneByIdWithOptions(id: number, options?: FindOneOptions<T>): Promise<T> {
 		const record: T = await this.executeRepositoryFunction(
-			this.getRepository().findByIds(new Array(id), options)
+			this.repository.findByIds(new Array(id), options)
 		);
 		if (!record) {
 			throw Boom.notFound(`${this.entityName}: The requested record was not found: ${id}`);
@@ -84,7 +74,7 @@ export default abstract class BaseRepository<T> extends Repository<T> {
 
 	public async findManyById(idList: number[], options?: FindOneOptions<T>): Promise<T[]> {
 		const records: T[] = await this.executeRepositoryFunction(
-			this.getRepository().findByIds(idList, options)
+			this.repository.findByIds(idList, options)
 		);
 		if (!records || records.length < 1) {
 			throw Boom.notFound(
@@ -95,7 +85,7 @@ export default abstract class BaseRepository<T> extends Repository<T> {
 	}
 
 	public async findOneByFilter(options: FindOneOptions<T>): Promise<T> {
-		const record = await this.executeRepositoryFunction(this.getRepository().findOne(options));
+		const record = await this.executeRepositoryFunction(this.repository.findOne(options));
 		if (!record) {
 			throw Boom.notFound(`${this.entityName}: The requested record was not found`);
 		}
@@ -103,9 +93,7 @@ export default abstract class BaseRepository<T> extends Repository<T> {
 	}
 
 	public async saveRecord(record: T, options?: SaveOptions): Promise<T> {
-		const result: any = await this.executeRepositoryFunction(
-			this.getRepository().save(record, options)
-		);
+		const result: any = await this.executeRepositoryFunction(this.repository.save(record, options));
 		if (!result) {
 			throw Boom.notFound(`${this.entityName}: The record was not saved: ${record}`);
 		}
@@ -122,7 +110,7 @@ export default abstract class BaseRepository<T> extends Repository<T> {
 		resolveRelations?: boolean
 	): Promise<T[]> {
 		const results: any = await this.executeRepositoryFunction(
-			this.getRepository().save(records, options)
+			this.repository.save(records, options)
 		);
 		if (!results) {
 			throw Boom.notFound(`${this.entityName}: The records were not saved`);
@@ -146,7 +134,7 @@ export default abstract class BaseRepository<T> extends Repository<T> {
 		if (!foundRecord) {
 			throw Boom.notFound(`${this.entityName}: The requested record was not found: ${id}`);
 		}
-		await this.executeRepositoryFunction(this.getRepository().update(id, record));
+		await this.executeRepositoryFunction(this.repository.update(id, record));
 		// Use find to automatically resolve eager relations
 		return this.findOneById(id);
 	}
@@ -157,7 +145,7 @@ export default abstract class BaseRepository<T> extends Repository<T> {
 		resolveRelations?: boolean
 	): Promise<T[]> {
 		const results: any = await this.executeRepositoryFunction(
-			this.getRepository().save(records, options)
+			this.repository.save(records, options)
 		);
 		if (!results) {
 			throw Boom.notFound(`${this.entityName}: The records were not updated`);
@@ -176,8 +164,12 @@ export default abstract class BaseRepository<T> extends Repository<T> {
 		return results;
 	}
 
+	public async delete(id: number): Promise<DeleteResult> {
+		return await this.executeRepositoryFunction(this.repository.delete(id));
+	}
+
 	public async deleteRecord(record: T, options?: RemoveOptions): Promise<T> {
-		return await this.executeRepositoryFunction(this.getRepository().remove(record, options));
+		return await this.executeRepositoryFunction(this.repository.remove(record, options));
 	}
 
 	public async deleteOneById(
@@ -207,8 +199,6 @@ export default abstract class BaseRepository<T> extends Repository<T> {
 				)}`
 			);
 		}
-		return await this.executeRepositoryFunction(
-			this.getRepository().remove(records, deleteOptions)
-		);
+		return await this.executeRepositoryFunction(this.repository.remove(records, deleteOptions));
 	}
 }
