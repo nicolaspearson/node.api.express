@@ -1,6 +1,6 @@
 import Boom from 'boom';
 import { validate, ValidationError } from 'class-validator';
-import { DeepPartial, FindManyOptions, FindOneOptions } from 'typeorm';
+import { DeepPartial, DeleteResult, FindManyOptions, FindOneOptions } from 'typeorm';
 
 import BaseRepository from '@repositories/base.repository';
 
@@ -99,7 +99,7 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 			// Execute the hook
 			this.preSaveHook(entity);
 			// Save the entity to the database
-			return await this.repository.save(entity);
+			return await this.repository.saveRecord(entity);
 		} catch (error) {
 			if (error && error.isBoom) {
 				throw error;
@@ -129,7 +129,7 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 		}
 	}
 
-	public async update(entity: T, id: number): Promise<T> {
+	public async update(id: number, entity: T): Promise<T> {
 		try {
 			// Check if the entity is valid
 			const entityIsValid = await this.isValid(entity);
@@ -169,7 +169,21 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 		}
 	}
 
-	public async delete(id: number): Promise<T> {
+	public async delete(id: number): Promise<DeleteResult> {
+		try {
+			if (!this.validId(id)) {
+				throw Boom.badRequest('Incorrect / invalid parameters supplied');
+			}
+			return await this.repository.delete(id);
+		} catch (error) {
+			if (error && error.isBoom) {
+				throw error;
+			}
+			throw Boom.internal(error);
+		}
+	}
+
+	public async deleteRecord(id: number): Promise<T> {
 		try {
 			if (!this.validId(id)) {
 				throw Boom.badRequest('Incorrect / invalid parameters supplied');
@@ -178,7 +192,7 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 			// Execute the hook
 			this.preDeleteHook(entityResult);
 			// Delete the record
-			await this.repository.delete(entityResult);
+			await this.repository.deleteRecord(entityResult);
 			return entityResult;
 		} catch (error) {
 			if (error && error.isBoom) {
@@ -197,7 +211,7 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 			// Execute the hook
 			this.preDeleteHook(entityResult);
 			// Save the record
-			await this.repository.save(entityResult);
+			await this.repository.saveRecord(entityResult);
 			return entityResult;
 		} catch (error) {
 			if (Boom.isBoom(error)) {

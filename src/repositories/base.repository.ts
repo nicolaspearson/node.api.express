@@ -10,11 +10,12 @@ import {
 	SelectQueryBuilder
 } from 'typeorm';
 
-export default abstract class BaseRepository<T> {
+export default abstract class BaseRepository<T> extends Repository<T> {
 	private entityName: string;
 	private repository: Repository<T>;
 
 	constructor(entityName: string) {
+		super();
 		this.entityName = entityName;
 	}
 
@@ -101,7 +102,7 @@ export default abstract class BaseRepository<T> {
 		return record;
 	}
 
-	public async save(record: T, options?: SaveOptions): Promise<T> {
+	public async saveRecord(record: T, options?: SaveOptions): Promise<T> {
 		const result: any = await this.executeRepositoryFunction(
 			this.getRepository().save(record, options)
 		);
@@ -175,7 +176,7 @@ export default abstract class BaseRepository<T> {
 		return results;
 	}
 
-	public async delete(record: T, options?: RemoveOptions): Promise<T> {
+	public async deleteRecord(record: T, options?: RemoveOptions): Promise<T> {
 		return await this.executeRepositoryFunction(this.getRepository().remove(record, options));
 	}
 
@@ -194,7 +195,7 @@ export default abstract class BaseRepository<T> {
 		if (!record) {
 			throw Boom.notFound(`${this.entityName}: The requested record was not found: ${id}`);
 		}
-		return await this.delete(record, deleteOptions);
+		return await this.deleteRecord(record, deleteOptions);
 	}
 
 	public async deleteManyById(idList: number[], deleteOptions?: RemoveOptions): Promise<T> {
