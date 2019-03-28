@@ -35,8 +35,8 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 			}
 			return true;
 		} catch (error) {
-			if (Boom.isBoom(error)) {
-				throw Boom.boomify(error);
+			if (error && error.isBoom) {
+				throw error;
 			}
 			throw Boom.badRequest('Unable to validate request: ' + error);
 		}
@@ -46,8 +46,8 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 		try {
 			return await this.repository.getAll();
 		} catch (error) {
-			if (Boom.isBoom(error)) {
-				throw Boom.boomify(error);
+			if (error && error.isBoom) {
+				throw error;
 			}
 			throw Boom.internal(error);
 		}
@@ -57,8 +57,8 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 		try {
 			return await this.repository.findManyByFilter(filter);
 		} catch (error) {
-			if (Boom.isBoom(error)) {
-				throw Boom.boomify(error);
+			if (error && error.isBoom) {
+				throw error;
 			}
 			throw Boom.internal(error);
 		}
@@ -71,8 +71,8 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 			}
 			return await this.repository.findOneById(id);
 		} catch (error) {
-			if (Boom.isBoom(error)) {
-				throw Boom.boomify(error);
+			if (error && error.isBoom) {
+				throw error;
 			}
 			throw Boom.internal(error);
 		}
@@ -82,8 +82,8 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 		try {
 			return await this.repository.findOneByFilter(filter);
 		} catch (error) {
-			if (Boom.isBoom(error)) {
-				throw Boom.boomify(error);
+			if (error && error.isBoom) {
+				throw error;
 			}
 			throw Boom.internal(error);
 		}
@@ -101,8 +101,8 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 			// Save the entity to the database
 			return await this.repository.save(entity);
 		} catch (error) {
-			if (Boom.isBoom(error)) {
-				throw Boom.boomify(error);
+			if (error && error.isBoom) {
+				throw error;
 			}
 			throw Boom.internal(error);
 		}
@@ -119,11 +119,11 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 				// Execute the hook
 				this.preSaveHook(entity);
 			}
-			// Save the entity to the database
+			// Save the entities to the database
 			return await this.repository.saveAll(entities);
 		} catch (error) {
-			if (Boom.isBoom(error)) {
-				throw Boom.boomify(error);
+			if (error && error.isBoom) {
+				throw error;
 			}
 			throw Boom.internal(error);
 		}
@@ -141,8 +141,29 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 			// Update the entity on the database
 			return await this.repository.updateOneById(id, entity);
 		} catch (error) {
-			if (Boom.isBoom(error)) {
-				throw Boom.boomify(error);
+			if (error && error.isBoom) {
+				throw error;
+			}
+			throw Boom.internal(error);
+		}
+	}
+
+	public async updateAll(entities: T[]): Promise<T[]> {
+		try {
+			for (const entity of entities) {
+				// Check if the entity is valid
+				const entityIsValid = await this.isValid(entity);
+				if (!entityIsValid) {
+					throw Boom.badRequest('Incorrect / invalid parameters supplied');
+				}
+				// Execute the hook
+				this.preUpdateHook(entity);
+			}
+			// Save the entities to the database
+			return await this.repository.updateAll(entities);
+		} catch (error) {
+			if (error && error.isBoom) {
+				throw error;
 			}
 			throw Boom.internal(error);
 		}
@@ -160,8 +181,8 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 			await this.repository.delete(entityResult);
 			return entityResult;
 		} catch (error) {
-			if (Boom.isBoom(error)) {
-				throw Boom.boomify(error);
+			if (error && error.isBoom) {
+				throw error;
 			}
 			throw Boom.internal(error);
 		}

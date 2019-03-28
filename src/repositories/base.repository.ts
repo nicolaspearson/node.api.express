@@ -41,8 +41,8 @@ export default abstract class BaseRepository<T> {
 		try {
 			return await repositoryFunction;
 		} catch (error) {
-			if (Boom.isBoom(error)) {
-				throw Boom.boomify(error);
+			if (error && error.isBoom) {
+				throw error;
 			}
 			if (error instanceof QueryFailedError) {
 				throw Boom.internal(error.message);
@@ -148,6 +148,31 @@ export default abstract class BaseRepository<T> {
 		await this.executeRepositoryFunction(this.getRepository().update(id, record));
 		// Use find to automatically resolve eager relations
 		return this.findOneById(id);
+	}
+
+	public async updateAll(
+		records: T[],
+		options?: SaveOptions,
+		resolveRelations?: boolean
+	): Promise<T[]> {
+		const results: any = await this.executeRepositoryFunction(
+			this.getRepository().save(records, options)
+		);
+		if (!results) {
+			throw Boom.notFound(`${this.entityName}: The records were not updated`);
+		}
+
+		if (resolveRelations) {
+			const eagerResults: T[] = [];
+			for (const result of results) {
+				if (result.id) {
+					// Use find to automatically resolve eager relations
+					eagerResults.push(await this.findOneById(result.id));
+				}
+			}
+			return eagerResults;
+		}
+		return results;
 	}
 
 	public async delete(record: T, options?: RemoveOptions): Promise<T> {
