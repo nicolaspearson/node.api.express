@@ -1,9 +1,10 @@
+import * as path from 'path';
 import { ConnectionOptions } from 'typeorm';
 import { LoggerOptions } from 'typeorm/logger/LoggerOptions';
 
 import * as env from '@env';
 
-export const config: ConnectionOptions = {
+const config: ConnectionOptions = {
 	type: 'postgres',
 	host: env.get().DB_HOST,
 	port: Number(env.get().DB_PORT),
@@ -13,10 +14,11 @@ export const config: ConnectionOptions = {
 	schema: env.get().DB_SCHEMA,
 	name: env.get().DB_CONNECTION_NAME,
 	logging: getDatabaseLogLevel(),
-	entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-	migrations: ['src/migrations/*.ts'],
+	synchronize: env.environment() !== 'production',
+	entities: [path.resolve('dist/entities/*.js')],
+	migrations: [path.resolve('dist/migrations/*.js')],
 	cli: {
-		migrationsDir: 'src/migrations'
+		migrationsDir: path.resolve('src/migrations')
 	}
 };
 
@@ -27,3 +29,5 @@ function getDatabaseLogLevel() {
 	}
 	return logLevel;
 }
+
+export = config;

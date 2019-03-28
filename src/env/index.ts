@@ -1,10 +1,10 @@
 import nconf from 'nconf';
 import * as path from 'path';
+import { LoggerOptions } from 'typeorm/logger/LoggerOptions';
 
 export function init() {
 	nconf.argv().env();
-	const environment = nconf.get('NODE_ENV') || 'development';
-	nconf.file(environment, path.resolve(`dist/env/config.${environment.toLowerCase()}.json`));
+	nconf.file(environment(), path.resolve(`dist/env/config.${environment().toLowerCase()}.json`));
 	nconf.file('default', path.resolve(`dist/env/config.default.json`));
 }
 
@@ -14,10 +14,7 @@ export interface IServerConfigurations {
 	DB_HOST: string;
 	DB_PORT: number | string;
 	DB_NAME: string;
-	DB_LOGGING:
-		| boolean
-		| 'all'
-		| Array<'query' | 'schema' | 'error' | 'warn' | 'info' | 'log' | 'migration'>;
+	DB_LOGGING: LoggerOptions;
 	DB_CONNECTION_NAME: string;
 	DB_SCHEMA: string;
 	DB_PASSWORD: string;
@@ -26,4 +23,8 @@ export interface IServerConfigurations {
 
 export function get(): IServerConfigurations {
 	return nconf.get();
+}
+
+export function environment(): string {
+	return nconf.get('NODE_ENV') || 'development';
 }

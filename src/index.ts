@@ -5,7 +5,6 @@ import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 
 import App from '@app';
-import * as db from '@db/config.db';
 import * as env from '@env';
 import * as logger from '@logger';
 
@@ -19,12 +18,13 @@ logger.init();
 
 (async () => {
 	try {
+		const dbConfig = await import('@db/config.db');
 		// Connect to the database
-		const connection = await createConnection(db.config);
+		const connection = await createConnection(dbConfig);
 		// Run migrations
 		await connection.runMigrations();
 	} catch (error) {
-		logger.logger.error(`Database: Error connecting: ${JSON.stringify(error)}`);
+		logger.logger.error(`Database: Error connecting!`, error);
 		return error;
 	}
 	// Finally, initialize the app.

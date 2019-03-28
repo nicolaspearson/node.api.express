@@ -24,7 +24,8 @@
 		"copy:env": "cp ./src/env/*.json ./dist/env/",
 		"test": "jest",
 		"test:coverage": "npm test -- --coverage",
-		"test:badges": "npm run test:coverage && jest-coverage-badges"
+		"test:badges": "npm run test:coverage && jest-coverage-badges",
+		"typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ./src/db/config.db.ts"
 	},
 	"dependencies": {
 		"body-parser": "~1.18.3",

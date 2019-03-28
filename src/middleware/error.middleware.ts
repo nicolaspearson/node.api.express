@@ -20,10 +20,7 @@ function errorMiddleware(
 		error = Boom.boomify(error, { statusCode, message });
 	}
 
-	response.status(statusCode).send({
-		message,
-		status
-	});
+	response.status(statusCode).send(error.output.payload);
 }
 
 export default errorMiddleware;
