@@ -79,7 +79,7 @@ export default class HeroController implements Controller {
 		const id = request.params.id;
 		const deleteResponse = await this.heroRepository.delete(id);
 		if (deleteResponse.affected && deleteResponse.affected > 0) {
-			response.sendStatus(200);
+			response.send({ statusCode: 200, message: 'Deleted!' });
 		} else {
 			next(Boom.notFound(`Hero with id ${id} not found!`));
 		}
