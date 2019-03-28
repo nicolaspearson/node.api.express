@@ -3,7 +3,6 @@ import * as express from 'express';
 
 import CreateHeroDto from '@dto/hero.create.dto';
 import UpdateHeroDto from '@dto/hero.update.dto';
-
 import Controller from '@interfaces/controller.interface';
 import authMiddleware from '@middleware/auth.middleware';
 import validationMiddleware from '@middleware/validation.middleware';
@@ -19,7 +18,7 @@ export default class HeroController implements Controller {
 		this.initializeRoutes();
 	}
 
-	public initializeRoutes() {
+	private initializeRoutes() {
 		this.router.get('/heroes', this.getHeroes);
 		this.router.get(`${this.path}/:id`, this.getHeroById);
 
@@ -30,7 +29,7 @@ export default class HeroController implements Controller {
 			.post(this.path, authMiddleware, validationMiddleware(CreateHeroDto), this.createHero);
 	}
 
-	public getHeroes = async (request: express.Request, response: express.Response) => {
+	private getHeroes = async (request: express.Request, response: express.Response) => {
 		const heroes = await this.heroService.findAll();
 		response.send(heroes);
 	};
@@ -45,7 +44,7 @@ export default class HeroController implements Controller {
 		response.send(hero);
 	};
 
-	public createHero = async (request: express.Request, response: express.Response) => {
+	private createHero = async (request: express.Request, response: express.Response) => {
 		const heroData: CreateHeroDto = request.body;
 		const newHero = this.heroService.save(heroData);
 		response.send(newHero);

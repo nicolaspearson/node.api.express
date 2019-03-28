@@ -19,6 +19,8 @@ export interface IServerConfigurations {
 	DB_SCHEMA: string;
 	DB_PASSWORD: string;
 	DB_USERNAME: string;
+	JWT_SECRET: string;
+	JWT_EXPIRATION: string;
 }
 
 export function get(): IServerConfigurations {

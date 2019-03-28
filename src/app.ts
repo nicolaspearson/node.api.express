@@ -2,7 +2,7 @@ import * as bodyParser from 'body-parser';
 import express from 'express';
 
 import HeroController from '@controllers/hero.controller';
-import * as config from '@env';
+import * as env from '@env';
 import { logger } from '@logger';
 import errorMiddleware from '@middleware/error.middleware';
 import loggerMiddleware from '@middleware/logger.middleware';
@@ -18,7 +18,7 @@ class App {
 	}
 
 	public listen() {
-		const port: number = Number(config.get().API_PORT);
+		const port: number = Number(env.get().API_PORT);
 		this.app.listen(port, () => {
 			logger.debug(`App: Listening on port ${port}!`);
 		});

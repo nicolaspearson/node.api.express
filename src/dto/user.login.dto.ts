@@ -1,6 +1,6 @@
 import { IsEmail, IsString, Length } from 'class-validator';
 
-class UserLoginDto {
+export default class LoginDto {
 	@IsString()
 	@IsEmail()
 	@Length(1, 500)
@@ -10,5 +10,3 @@ class UserLoginDto {
 	@Length(6, 500)
 	public password: string;
 }
-
-export default UserLoginDto;
