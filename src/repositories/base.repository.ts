@@ -21,6 +21,29 @@ export default class BaseRepository<T> {
 	}
 
 	/**
+	 *
+	 * NATURAL: The functions below are NOT wrapped, and are proxied directly to the repository
+	 *
+	 */
+
+	public async delete(id: number): Promise<DeleteResult> {
+		return await this.repository.delete(id);
+	}
+
+	public async findOne(
+		conditions?: FindConditions<T> | undefined,
+		options?: FindOneOptions<T> | undefined
+	): Promise<T | undefined> {
+		return await this.repository.findOne(conditions, options);
+	}
+
+	/**
+	 *
+	 * WRAPPED: The functions below are wrapped to throw a consistent error
+	 *
+	 */
+
+	/**
 	 * This function wraps the execution of all repository calls
 	 * in a generic try-catch in order to decrease duplication,
 	 * and centralize error handling. All calls to the repository
@@ -52,13 +75,6 @@ export default class BaseRepository<T> {
 			throw Boom.notFound(`${this.entityName}: The requested record was not found`);
 		}
 		return records;
-	}
-
-	public async findOne(
-		conditions?: FindConditions<T> | undefined,
-		options?: FindOneOptions<T> | undefined
-	): Promise<T | undefined> {
-		return await this.repository.findOne(conditions, options);
 	}
 
 	public async findOneById(id: number): Promise<T> {
@@ -169,10 +185,6 @@ export default class BaseRepository<T> {
 			return eagerResults;
 		}
 		return results;
-	}
-
-	public async delete(id: number): Promise<DeleteResult> {
-		return await this.executeRepositoryFunction(this.repository.delete(id));
 	}
 
 	public async deleteRecord(record: T, options?: RemoveOptions): Promise<T> {
