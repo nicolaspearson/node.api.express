@@ -31,6 +31,11 @@ export default class UserService extends BaseService<User> {
 		user.deletedAt = new Date();
 	}
 
+	public preResultHook(user: User) {
+		// Executed before the result is returned
+		delete user.password;
+	}
+
 	public async register(userData: RegisterUserDto): Promise<CookieUser> {
 		if (await this.userRepository.findOne({ emailAddress: userData.emailAddress })) {
 			throw Boom.badRequest('That email address is already registered!');

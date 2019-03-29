@@ -21,4 +21,9 @@ export default class HeroService extends BaseService<Hero> {
 		// Executed before the delete repository call
 		hero.deletedAt = new Date();
 	}
+
+	public preResultHook(hero: Hero) {
+		// Executed before the result is returned
+		delete hero.deletedAt;
+	}
 }
