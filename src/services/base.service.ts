@@ -21,6 +21,10 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 		// Executed before the delete repository call
 	}
 
+	public preResultHook(entity: T): void {
+		// Executed before the result is returned
+	}
+
 	public validId(id: number): boolean {
 		return id !== undefined && id > 0;
 	}
@@ -44,7 +48,9 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 
 	public async findAll(): Promise<T[]> {
 		try {
-			return await this.repository.getAll();
+			const entities: T[] = await this.repository.getAll();
+			entities.map(item => this.preResultHook(item));
+			return entities;
 		} catch (error) {
 			if (error && error.isBoom) {
 				throw error;
@@ -55,7 +61,9 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 
 	public async findAllByFilter(filter: FindManyOptions<T>): Promise<T[]> {
 		try {
-			return await this.repository.findManyByFilter(filter);
+			const entities: T[] = await this.repository.findManyByFilter(filter);
+			entities.map(item => this.preResultHook(item));
+			return entities;
 		} catch (error) {
 			if (error && error.isBoom) {
 				throw error;
@@ -69,7 +77,9 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 			if (!this.validId(id) || isNaN(id)) {
 				throw Boom.badRequest('Incorrect / invalid parameters supplied');
 			}
-			return await this.repository.findOneById(id);
+			const entity: T = await this.repository.findOneById(id);
+			this.preResultHook(entity);
+			return entity;
 		} catch (error) {
 			if (error && error.isBoom) {
 				throw error;
@@ -80,7 +90,9 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 
 	public async findOneByFilter(filter: FindOneOptions<T>): Promise<T> {
 		try {
-			return await this.repository.findOneByFilter(filter);
+			const entityResult = await this.repository.findOneByFilter(filter);
+			this.preResultHook(entityResult);
+			return entityResult;
 		} catch (error) {
 			if (error && error.isBoom) {
 				throw error;
@@ -99,7 +111,9 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 			// Execute the hook
 			this.preSaveHook(entity);
 			// Save the entity to the database
-			return await this.repository.saveRecord(entity);
+			const savedEntity: T = await this.repository.saveRecord(entity);
+			this.preResultHook(savedEntity);
+			return savedEntity;
 		} catch (error) {
 			if (error && error.isBoom) {
 				throw error;
@@ -120,7 +134,9 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 				this.preSaveHook(entity);
 			}
 			// Save the entities to the database
-			return await this.repository.saveAll(entities);
+			const savedEntities: T[] = await this.repository.saveAll(entities);
+			savedEntities.map(item => this.preResultHook(item));
+			return savedEntities;
 		} catch (error) {
 			if (error && error.isBoom) {
 				throw error;
@@ -139,7 +155,9 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 			// Execute the hook
 			this.preUpdateHook(entity);
 			// Update the entity on the database
-			return await this.repository.updateOneById(id, entity);
+			const updatedEntity: T = await this.repository.updateOneById(id, entity);
+			this.preResultHook(updatedEntity);
+			return updatedEntity;
 		} catch (error) {
 			if (error && error.isBoom) {
 				throw error;
@@ -159,8 +177,10 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 				// Execute the hook
 				this.preUpdateHook(entity);
 			}
-			// Save the entities to the database
-			return await this.repository.updateAll(entities);
+			// Update the entities on the database
+			const updatedEntities: T[] = await this.repository.updateAll(entities);
+			updatedEntities.map(item => this.preResultHook(item));
+			return updatedEntities;
 		} catch (error) {
 			if (error && error.isBoom) {
 				throw error;
@@ -192,8 +212,9 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 			// Execute the hook
 			this.preDeleteHook(entityResult);
 			// Delete the record
-			await this.repository.deleteRecord(entityResult);
-			return entityResult;
+			const deletedEntity: T = await this.repository.deleteRecord(entityResult);
+			this.preResultHook(deletedEntity);
+			return deletedEntity;
 		} catch (error) {
 			if (error && error.isBoom) {
 				throw error;
@@ -208,11 +229,12 @@ export default abstract class BaseService<T extends DeepPartial<T>> {
 				throw Boom.badRequest('Incorrect / invalid parameters supplied');
 			}
 			const entityResult: T = await this.repository.findOneById(id);
-			// Execute the hook
+			// Execute the hook - In this scenario your hook should set the deleted_at field
 			this.preDeleteHook(entityResult);
-			// Save the record
-			await this.repository.saveRecord(entityResult);
-			return entityResult;
+			// Save the record to apply the soft delete
+			const deletedEntity: T = await this.repository.saveRecord(entityResult);
+			this.preResultHook(deletedEntity);
+			return deletedEntity;
 		} catch (error) {
 			if (Boom.isBoom(error)) {
 				throw Boom.boomify(error);

@@ -1,7 +1,5 @@
 import Boom from 'boom';
 import {
-	DeleteResult,
-	FindConditions,
 	FindManyOptions,
 	FindOneOptions,
 	getRepository,
@@ -11,37 +9,18 @@ import {
 	SaveOptions
 } from 'typeorm';
 
-export default class BaseRepository<T> {
-	private entityName: string;
-	private repository: Repository<T>;
+import TypeOrmRepository from '@repositories/type-orm.repository';
+
+// The functions in this class are wrapped to throw consistent errors
+export default abstract class BaseRepository<T> extends TypeOrmRepository<T> {
+	public entityName: string;
+	public repository: Repository<T>;
 
 	constructor(entityName: string) {
+		super(entityName);
 		this.entityName = entityName;
 		this.repository = getRepository(this.entityName);
 	}
-
-	/**
-	 *
-	 * NATURAL: The functions below are NOT wrapped, and are proxied directly to the repository
-	 *
-	 */
-
-	public async delete(id: number): Promise<DeleteResult> {
-		return await this.repository.delete(id);
-	}
-
-	public async findOne(
-		conditions?: FindConditions<T> | undefined,
-		options?: FindOneOptions<T> | undefined
-	): Promise<T | undefined> {
-		return await this.repository.findOne(conditions, options);
-	}
-
-	/**
-	 *
-	 * WRAPPED: The functions below are wrapped to throw a consistent error
-	 *
-	 */
 
 	/**
 	 * This function wraps the execution of all repository calls
