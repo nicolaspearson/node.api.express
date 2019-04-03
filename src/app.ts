@@ -9,13 +9,17 @@ import errorMiddleware from '@middleware/error.middleware';
 import loggerMiddleware from '@middleware/logger.middleware';
 
 class App {
-	public app: express.Application;
+	private app: express.Application;
 
 	constructor() {
 		this.app = express();
 		this.initializeMiddleware();
 		this.initializeControllers();
 		this.initializeErrorHandling();
+	}
+
+	public getServer(): express.Application {
+		return this.app;
 	}
 
 	public listen() {
