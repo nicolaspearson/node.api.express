@@ -4,13 +4,18 @@ import * as typeorm from 'typeorm';
 import App from '../src/app';
 import AuthController from '../src/controllers/auth.controller';
 import RegisterUserDto from '../src/dto/user.register.dto';
+import * as env from '../src/env';
+import * as logger from '../src/logger';
 
 (typeorm as any).getRepository = jest.fn();
+
+env.init();
+logger.init();
 
 describe('AuthController', () => {
 	describe('POST /auth/register', () => {
 		describe('if the email address is not in use', () => {
-			it('response should have the Set-Cookie header with the Authorization token', () => {
+			it('response should have the Set-Cookie header with the Authorization token', async () => {
 				const userData: RegisterUserDto = {
 					firstName: 'John',
 					lastName: 'Doe',
@@ -27,6 +32,7 @@ describe('AuthController', () => {
 						})
 				});
 				const app = new App();
+				app.listen();
 				const authController = new AuthController();
 				return request(app.getServer())
 					.post(`${authController.path}/register`)
