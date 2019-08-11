@@ -110,7 +110,7 @@ export default class UserService extends BaseService<User> {
 		return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn}`;
 	}
 
-	private async encryptPassword(password: string): Promise<string> {
+	public async encryptPassword(password: string): Promise<string> {
 		try {
 			const salt: string = await bcrypt.genSalt(10);
 			return await bcrypt.hash(password, salt);

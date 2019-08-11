@@ -10,7 +10,7 @@ import UserService from '@services/user.service';
 export default class AuthController implements Controller {
 	public path: string = '/auth';
 	public router = express.Router();
-	private userService = new UserService(new UserRepository());
+	public userService = new UserService(new UserRepository());
 
 	constructor() {
 		this.initializeRoutes();
