@@ -1,5 +1,6 @@
 import * as bodyParser from 'body-parser';
 import express from 'express';
+import { Server } from 'http';
 
 import AuthController from '@controllers/auth.controller';
 import HeroController from '@controllers/hero.controller';
@@ -10,6 +11,7 @@ import loggerMiddleware from '@middleware/logger.middleware';
 
 class App {
 	private app: express.Application;
+	private server: Server;
 
 	constructor() {
 		this.app = express();
@@ -18,13 +20,17 @@ class App {
 		this.initializeErrorHandling();
 	}
 
-	public getServer(): express.Application {
+	public getExpressApp(): express.Application {
 		return this.app;
+	}
+
+	public getServer(): Server {
+		return this.server;
 	}
 
 	public listen() {
 		const port: number = Number(env.get().API_PORT);
-		this.app.listen(port, () => {
+		this.server = this.app.listen(port, () => {
 			logger.debug(`App: Listening on port ${port}!`);
 		});
 	}

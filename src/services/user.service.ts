@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt';
 import Boom from 'boom';
 
-import LoginDto from '@dto/user.login.dto';
+import LoginUserDto from '@dto/user.login.dto';
 import RegisterUserDto from '@dto/user.register.dto';
 import User from '@entities/user.entity';
 import CookieUser from '@interfaces/cookie-user';
@@ -56,7 +56,7 @@ export default class UserService extends BaseService<User> {
 		};
 	}
 
-	public async login(userData: LoginDto): Promise<CookieUser> {
+	public async login(userData: LoginUserDto): Promise<CookieUser> {
 		try {
 			let userResult: User;
 			try {

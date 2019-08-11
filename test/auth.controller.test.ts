@@ -34,7 +34,7 @@ describe('AuthController', () => {
 				const app = new App();
 				app.listen();
 				const authController = new AuthController();
-				return request(app.getServer())
+				return request(app.getExpressApp())
 					.post(`${authController.path}/register`)
 					.send(userData)
 					.expect('Set-Cookie', /^Authorization=.+/);

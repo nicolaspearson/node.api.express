@@ -1,6 +1,6 @@
 import * as express from 'express';
 
-import LoginDto from '@dto/user.login.dto';
+import LoginUserDto from '@dto/user.login.dto';
 import RegisterUserDto from '@dto/user.register.dto';
 import Controller from '@interfaces/controller.interface';
 import validationMiddleware from '@middleware/validation.middleware';
@@ -22,7 +22,7 @@ export default class AuthController implements Controller {
 			validationMiddleware(RegisterUserDto),
 			this.registration
 		);
-		this.router.post(`${this.path}/login`, validationMiddleware(LoginDto), this.login);
+		this.router.post(`${this.path}/login`, validationMiddleware(LoginUserDto), this.login);
 	}
 
 	private registration = async (
@@ -45,7 +45,7 @@ export default class AuthController implements Controller {
 		response: express.Response,
 		next: express.NextFunction
 	) => {
-		const userData: LoginDto = request.body;
+		const userData: LoginUserDto = request.body;
 		try {
 			const { cookie, user } = await this.userService.login(userData);
 			response.setHeader('Set-Cookie', [cookie]);
