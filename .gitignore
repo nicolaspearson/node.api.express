@@ -12,5 +12,4 @@ logs/*.log
 .DS_Store
 
 # Database files
-/db/data
-
+/docker/db/data

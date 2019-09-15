@@ -39,7 +39,7 @@ export default class HeroController implements Controller {
 		response: express.Response,
 		next: express.NextFunction
 	) => {
-		const id = request.params.id;
+		const id = Number(request.params.id);
 		const hero = await this.heroService.findOneById(id);
 		response.send(hero);
 	};
@@ -55,7 +55,7 @@ export default class HeroController implements Controller {
 		response: express.Response,
 		next: express.NextFunction
 	) => {
-		const id = request.params.id;
+		const id = Number(request.params.id);
 		const heroData: UpdateHeroDto = request.body;
 		const updatedHero = await this.heroService.update(id, heroData);
 		response.send(updatedHero);
@@ -66,7 +66,7 @@ export default class HeroController implements Controller {
 		response: express.Response,
 		next: express.NextFunction
 	) => {
-		const id = request.params.id;
+		const id = Number(request.params.id);
 		const deleteResponse = await this.heroService.delete(id);
 		if (deleteResponse.affected && deleteResponse.affected > 0) {
 			response.send({ statusCode: 200, message: 'Deleted!' });
