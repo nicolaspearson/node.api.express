@@ -17,7 +17,7 @@ cd docker
 docker-compose  up
 ```
 
-**3. Build and run the app using cargo**
+**3. Build and run the app using npm**
 
 #### Run the app in development mode:
 
