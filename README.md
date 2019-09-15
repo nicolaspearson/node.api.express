@@ -13,7 +13,8 @@ git clone https://github.com/nicolaspearson/node.api.express.git
 **2. Start the database**
 
 ```bash
-docker-compose up
+cd docker
+docker-compose  up
 ```
 
 **3. Build and run the app using cargo**
