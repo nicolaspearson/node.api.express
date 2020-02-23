@@ -39,7 +39,7 @@
 		"jsonwebtoken": "~8.5.1",
 		"module-alias": "~2.2.2",
 		"nconf": "~0.10.0",
-		"pg": "~7.18.1",
+		"pg": "~7.18.2",
 		"reflect-metadata": "~0.1.13",
 		"typeorm": "~0.2.22",
 		"winston": "~3.2.1"
